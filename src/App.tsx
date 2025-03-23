@@ -248,6 +248,15 @@ function QuotationApp() {
   }
 
   const exportToPDF = async () => {
+    if (!validateFields()) {
+      setSnackbar({
+        open: true,
+        message: 'Please fill in all required fields',
+        severity: 'error'
+      })
+      return
+    }
+
     if (quotationRef.current) {
       const canvas = await html2canvas(quotationRef.current, {
         scale: 2,
@@ -269,31 +278,6 @@ function QuotationApp() {
       setSnackbar({
         open: true,
         message: 'PDF exported successfully',
-        severity: 'success'
-      })
-    }
-  }
-
-  const exportToJPG = async () => {
-    if (!validateFields()) {
-      setSnackbar({
-        open: true,
-        message: 'Please fill in all required fields',
-        severity: 'error'
-      })
-      return
-    }
-
-    if (quotationRef.current) {
-      const canvas = await html2canvas(quotationRef.current)
-      const link = document.createElement('a')
-      link.download = `Quotation_${new Date().toISOString().split('T')[0]}.jpg`
-      link.href = canvas.toDataURL('image/jpeg', 0.8)
-      link.click()
-      
-      setSnackbar({
-        open: true,
-        message: 'JPG exported successfully',
         severity: 'success'
       })
     }
@@ -692,7 +676,7 @@ function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <QuotationApp />
             </ProtectedRoute>
           }

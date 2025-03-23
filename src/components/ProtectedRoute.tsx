@@ -3,11 +3,10 @@ import Cookies from 'js-cookie'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
+  isAuthenticated: boolean
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const isAuthenticated = Cookies.get('auth') === 'true'
-
+const ProtectedRoute = ({ children, isAuthenticated }: ProtectedRouteProps) => {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />
   }
