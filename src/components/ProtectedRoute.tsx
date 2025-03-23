@@ -1,5 +1,4 @@
 import { Navigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
