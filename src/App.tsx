@@ -210,7 +210,7 @@ function QuotationApp() {
     const worksheet = XLSX.utils.aoa_to_sheet([
       ['QUOTATION'],
       ['MANNANETHU AGENCIES'],
-      ['THATTEKATTUPADI, CHETTIKULANAGARA P O'],
+      ['THATTEKATTUPADI, CHETTIKULANGARA P O'],
       ['ALAPPUZHA DIST, 690 106'],
       ['PH: 0479 2348855, MOB: 9447896131, 7025777710'],
       ['Email: mannanethu@gmail.com'],
@@ -534,7 +534,7 @@ function QuotationApp() {
                 MANNANETHU AGENCIES
               </Typography>
               <Typography variant="body2">
-                THATTEKATTUPADI, CHETTIKULANAGARA P O
+                THATTEKATTUPADI, CHETTIKULANGARA P O
               </Typography>
               <Typography variant="body2">
                 ALAPPUZHA DIST, 690 106
