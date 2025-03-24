@@ -212,7 +212,7 @@ function QuotationApp() {
       ['MANNANETHU AGENCIES'],
       ['THATTEKATTUPADI, CHETTIKULANGARA P O'],
       ['ALAPPUZHA DIST, 690 106'],
-      ['PH: 0479 2348855, MOB: 9447896131, 7025777710'],
+      ['MOB: 9447896131, 7025777710'],
       ['Email: mannanethu@gmail.com'],
       [''],
       ['Customer Details:'],
