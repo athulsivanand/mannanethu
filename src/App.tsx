@@ -46,7 +46,7 @@ interface QuotationData {
   quoteNo: string
   date: string
   validDays: string
-  comments: string
+  Requirements: string
   items: Item[]
   preparedBy: string
   salesMan: string
@@ -73,7 +73,7 @@ function QuotationApp() {
     quoteNo: '',
     date: new Date().toLocaleDateString('en-GB'),
     validDays: '7',
-    comments: '',
+    Requirements: '',
     items: [],
     preparedBy: '',
     salesMan: ''
@@ -315,7 +315,7 @@ function QuotationApp() {
       quoteNo: nextQuoteNo,
       date: new Date().toLocaleDateString('en-GB'),
       validDays: '7',
-      comments: '',
+      Requirements: '',
       items: [],
       preparedBy: '',
       salesMan: ''
@@ -586,7 +586,7 @@ function QuotationApp() {
                 ALAPPUZHA DIST, 690 106
               </Typography>
               <Typography variant="body2">
-                PH: 0479 2348855, MOB: 9447896131, 7025777710
+                MOB: 6235353512, 7025777710
               </Typography>
               <Typography variant="body2">
                 Email: mannanethu@gmail.com
