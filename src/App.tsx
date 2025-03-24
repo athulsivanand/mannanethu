@@ -48,6 +48,8 @@ interface QuotationData {
   validDays: string
   comments: string
   items: Item[]
+  preparedBy: string
+  salesMan: string
 }
 
 interface ValidationErrors {
@@ -72,7 +74,9 @@ function QuotationApp() {
     date: new Date().toLocaleDateString('en-GB'),
     validDays: '7',
     comments: '',
-    items: []
+    items: [],
+    preparedBy: '',
+    salesMan: ''
   })
 
   const [newItem, setNewItem] = useState<Item>({
@@ -212,8 +216,10 @@ function QuotationApp() {
       ['MANNANETHU AGENCIES'],
       ['THATTEKATTUPADI, CHETTIKULANGARA P O'],
       ['ALAPPUZHA DIST, 690 106'],
-      ['MOB: 9447896131, 7025777710'],
+      ['PH: 0479 2348855, MOB: 9447896131, 7025777710'],
       ['Email: mannanethu@gmail.com'],
+      [''],
+      ['Sales Man:', quotationData.salesMan],
       [''],
       ['Customer Details:'],
       ['Name:', quotationData.customerName],
@@ -234,7 +240,9 @@ function QuotationApp() {
       ]),
       [''],
       ['GRAND TOTAL', '', '', '', formatAmount(calculateTotal())],
-    ].filter(row => row.length > 0)) // Filter out empty GST row if not present
+      [''],
+      ['Prepared By:', quotationData.preparedBy],
+    ].filter(row => row.length > 0))
 
     const workbook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Quotation')
@@ -308,7 +316,9 @@ function QuotationApp() {
       date: new Date().toLocaleDateString('en-GB'),
       validDays: '7',
       comments: '',
-      items: []
+      items: [],
+      preparedBy: '',
+      salesMan: ''
     })
   }
 
@@ -367,16 +377,13 @@ function QuotationApp() {
                 helperText={errors.mobile}
                 margin="normal"
               />
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Comments"
-                  value={quotationData.comments}
-                  onChange={handleCustomerChange('comments')}
-                  multiline
-                  rows={3}
-                />
-              </Grid>
+              <TextField
+                fullWidth
+                label="Prepared By"
+                value={quotationData.preparedBy}
+                onChange={handleCustomerChange('preparedBy')}
+                margin="normal"
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -403,6 +410,13 @@ function QuotationApp() {
                 onChange={handleCustomerChange('validDays')}
                 margin="normal"
                 type="text"
+              />
+              <TextField
+                fullWidth
+                label="Sales Man"
+                value={quotationData.salesMan}
+                onChange={handleCustomerChange('salesMan')}
+                margin="normal"
               />
             </Grid>
           </Grid>
@@ -524,8 +538,36 @@ function QuotationApp() {
         </Paper>
 
         {/* Preview/Export View */}
-        <Paper ref={quotationRef} sx={{ p: 4, mb: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <Paper ref={quotationRef} sx={{ p: 4, mb: 4, border: '2px solid #000' }}>
+          {/* Header */}
+          <Typography 
+            variant="h4" 
+            align="center" 
+            sx={{ 
+              mb: 3,
+              pb: 1,
+              borderBottom: '2px solid #000',
+              fontWeight: 'bold'
+            }}
+          >
+            QUOTATION
+          </Typography>
+
+          {/* Sales Man - Top Right */}
+          <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
+            <Typography variant="body2">
+              Sales Man: {quotationData.salesMan}
+            </Typography>
+          </Box>
+
+          {/* Company Info with Logo */}
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            mb: 3,
+            pb: 2,
+            borderBottom: '1px solid #000'
+          }}>
             <Box sx={{ width: 150, mr: 2 }}>
               <img src="/logo.png" alt="Mannanethu Agencies" style={{ width: '100%' }} />
             </Box>
@@ -548,9 +590,8 @@ function QuotationApp() {
             </Box>
           </Box>
 
-          <Divider sx={{ my: 2 }} />
-
-          <Grid container spacing={2} sx={{ mb: 3 }}>
+          {/* Customer and Quote Details */}
+          <Grid container spacing={2} sx={{ mb: 3, pb: 2, borderBottom: '1px solid #000' }}>
             <Grid item xs={12} sm={6}>
               <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                 {quotationData.customerName}
@@ -575,34 +616,42 @@ function QuotationApp() {
             </Grid>
           </Grid>
 
-          <Divider sx={{ my: 2 }} />
-
+          {/* Items Table */}
           <TableContainer>
-            <Table>
+            <Table sx={{ border: '1px solid #000' }}>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ borderBottom: '2px solid rgba(0, 0, 0, 0.12)', borderTop: '2px solid rgba(0, 0, 0, 0.12)' }}>Description of Goods</TableCell>
-                  <TableCell align="right" sx={{ borderBottom: '2px solid rgba(0, 0, 0, 0.12)', borderTop: '2px solid rgba(0, 0, 0, 0.12)' }}>QTY</TableCell>
-                  <TableCell sx={{ borderBottom: '2px solid rgba(0, 0, 0, 0.12)', borderTop: '2px solid rgba(0, 0, 0, 0.12)' }}>Unit</TableCell>
-                  <TableCell align="right" sx={{ borderBottom: '2px solid rgba(0, 0, 0, 0.12)', borderTop: '2px solid rgba(0, 0, 0, 0.12)' }}>Rate</TableCell>
-                  <TableCell align="right" sx={{ borderBottom: '2px solid rgba(0, 0, 0, 0.12)', borderTop: '2px solid rgba(0, 0, 0, 0.12)' }}>Amount</TableCell>
+                  <TableCell sx={{ borderBottom: '2px solid #000', borderRight: '1px solid #000', fontWeight: 'bold' }}>Description of Goods</TableCell>
+                  <TableCell align="right" sx={{ borderBottom: '2px solid #000', borderRight: '1px solid #000', fontWeight: 'bold' }}>QTY</TableCell>
+                  <TableCell sx={{ borderBottom: '2px solid #000', borderRight: '1px solid #000', fontWeight: 'bold' }}>Unit</TableCell>
+                  <TableCell align="right" sx={{ borderBottom: '2px solid #000', borderRight: '1px solid #000', fontWeight: 'bold' }}>Rate</TableCell>
+                  <TableCell align="right" sx={{ borderBottom: '2px solid #000', fontWeight: 'bold' }}>Amount</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {quotationData.items.map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>{item.description}</TableCell>
-                    <TableCell align="right" sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>{item.qty}</TableCell>
-                    <TableCell sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>{item.unit}</TableCell>
-                    <TableCell align="right" sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>{item.rate}</TableCell>
-                    <TableCell align="right" sx={{ borderBottom: '1px solid rgba(0, 0, 0, 0.12)' }}>{formatAmount(item.amount)}</TableCell>
+                    <TableCell sx={{ borderRight: '1px solid #000' }}>{item.description}</TableCell>
+                    <TableCell align="right" sx={{ borderRight: '1px solid #000' }}>{item.qty}</TableCell>
+                    <TableCell sx={{ borderRight: '1px solid #000' }}>{item.unit}</TableCell>
+                    <TableCell align="right" sx={{ borderRight: '1px solid #000' }}>{item.rate}</TableCell>
+                    <TableCell align="right">{formatAmount(item.amount)}</TableCell>
                   </TableRow>
                 ))}
                 <TableRow>
-                  <TableCell colSpan={4} align="right" sx={{ borderTop: '2px solid rgba(0, 0, 0, 0.12)', borderBottom: '2px solid rgba(0, 0, 0, 0.12)', fontWeight: 'bold' }}>
+                  <TableCell colSpan={4} align="right" sx={{ 
+                    borderTop: '2px solid #000',
+                    borderBottom: '2px solid #000',
+                    fontWeight: 'bold',
+                    borderRight: '1px solid #000'
+                  }}>
                     GRAND TOTAL
                   </TableCell>
-                  <TableCell align="right" sx={{ borderTop: '2px solid rgba(0, 0, 0, 0.12)', borderBottom: '2px solid rgba(0, 0, 0, 0.12)', fontWeight: 'bold' }}>
+                  <TableCell align="right" sx={{ 
+                    borderTop: '2px solid #000',
+                    borderBottom: '2px solid #000',
+                    fontWeight: 'bold'
+                  }}>
                     {formatAmount(calculateTotal())}
                   </TableCell>
                 </TableRow>
@@ -610,22 +659,24 @@ function QuotationApp() {
             </Table>
           </TableContainer>
 
-          {quotationData.comments && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="body1">
-                <strong>Comments:</strong>
-              </Typography>
-              <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
-                {quotationData.comments}
+          {/* Bottom Section */}
+          <Box sx={{ 
+            mt: 4,
+            pt: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end'
+          }}>
+            {/* Prepared By - Bottom Left */}
+            <Box>
+              <Typography variant="body2" sx={{ borderTop: '1px solid #000', pt: 1 }}>
+                Prepared By: {quotationData.preparedBy}
               </Typography>
             </Box>
-          )}
 
-          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-            <Box sx={{ textAlign: 'center', flex: 1 }}>
+            {/* Logos - Bottom Right */}
+            <Box sx={{ display: 'flex', gap: 4 }}>
               <img src="/tc.png" alt="TC" style={{ height: '50px' }} />
-            </Box>
-            <Box sx={{ textAlign: 'center', flex: 1 }}>
               <img src="/msquare.png" alt="M-SQUARE" style={{ height: '50px' }} />
             </Box>
           </Box>
