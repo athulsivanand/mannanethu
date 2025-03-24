@@ -550,30 +550,19 @@ function QuotationApp() {
 
         {/* Preview/Export View */}
         <Paper ref={quotationRef} sx={{ p: 4, mb: 4, border: '2px solid #000', position: 'relative' }}>
-          {/* Header with Salesperson */}
-          <Box sx={{ mb: 3, position: 'relative' }}>
-            <Typography 
-              variant="h4" 
-              align="center" 
-              sx={{ 
-                pb: 1,
-                borderBottom: '2px solid #000',
-                fontWeight: 'bold'
-              }}
-            >
-              QUOTATION
-            </Typography>
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                position: 'absolute',
-                top: 0,
-                right: 0
-              }}
-            >
-              Salesperson: {quotationData.salesMan}
-            </Typography>
-          </Box>
+          {/* Header */}
+          <Typography 
+            variant="h4" 
+            align="center" 
+            sx={{ 
+              mb: 3,
+              pb: 1,
+              borderBottom: '2px solid #000',
+              fontWeight: 'bold'
+            }}
+          >
+            QUOTATION
+          </Typography>
 
           {/* Company Info with Logo */}
           <Box sx={{ 
@@ -627,6 +616,9 @@ function QuotationApp() {
               </Typography>
               <Typography variant="body2">
                 Valid for {quotationData.validDays} Days
+              </Typography>
+              <Typography variant="body2">
+                Salesperson: {quotationData.salesMan}
               </Typography>
             </Grid>
           </Grid>
@@ -701,10 +693,24 @@ function QuotationApp() {
               </Typography>
             </Box>
 
-            {/* Logos - Bottom Right */}
-            <Box sx={{ display: 'flex', gap: 4 }}>
-              <img src="/tc.png" alt="TC" style={{ height: '50px' }} />
-              <img src="/msquare.png" alt="M-SQUARE" style={{ height: '50px' }} />
+            {/* Logos - Bottom Middle */}
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 1
+            }}>
+              <Box sx={{ display: 'flex', gap: 4 }}>
+                <img src="/tc.png" alt="TC" style={{ height: '50px' }} />
+                <img src="/msquare.png" alt="M-SQUARE" style={{ height: '50px' }} />
+              </Box>
+            </Box>
+
+            {/* Authorised Signatory - Bottom Right */}
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography variant="body2" sx={{ borderTop: '1px solid #000', pt: 1 }}>
+                Authorised Signatory
+              </Typography>
             </Box>
           </Box>
         </Paper>
