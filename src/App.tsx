@@ -216,7 +216,7 @@ function QuotationApp() {
       ['MANNANETHU AGENCIES'],
       ['THATTEKATTUPADI, CHETTIKULANGARA P O'],
       ['ALAPPUZHA DIST, 690 106'],
-      ['PH: 0479 2348855, MOB: 9447896131, 7025777710'],
+      ['MOB: 6235353512, 7025777710'],
       ['Email: mannanethu@gmail.com'],
       [''],
       ['Salesperson:', quotationData.salesMan],
@@ -240,6 +240,8 @@ function QuotationApp() {
       ]),
       [''],
       ['GRAND TOTAL', '', '', '', formatAmount(calculateTotal())],
+      [''],
+      ['Requirements:', quotationData.Requirements],
       [''],
       ['Prepared By:', quotationData.preparedBy],
     ].filter(row => row.length > 0))
@@ -376,6 +378,15 @@ function QuotationApp() {
                 error={!!errors.mobile}
                 helperText={errors.mobile}
                 margin="normal"
+              />
+              <TextField
+                fullWidth
+                label="Requirements"
+                value={quotationData.Requirements}
+                onChange={handleCustomerChange('Requirements')}
+                margin="normal"
+                multiline
+                rows={3}
               />
               <TextField
                 fullWidth
@@ -662,6 +673,18 @@ function QuotationApp() {
               </TableBody>
             </Table>
           </TableContainer>
+
+          {/* Requirements Section */}
+          {quotationData.Requirements && (
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                Requirements:
+              </Typography>
+              <Typography variant="body2" sx={{ whiteSpace: 'pre-line' }}>
+                {quotationData.Requirements}
+              </Typography>
+            </Box>
+          )}
 
           {/* Bottom Section */}
           <Box sx={{ 
