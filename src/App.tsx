@@ -219,7 +219,7 @@ function QuotationApp() {
       ['PH: 0479 2348855, MOB: 9447896131, 7025777710'],
       ['Email: mannanethu@gmail.com'],
       [''],
-      ['Sales Man:', quotationData.salesMan],
+      ['Salesperson:', quotationData.salesMan],
       [''],
       ['Customer Details:'],
       ['Name:', quotationData.customerName],
@@ -413,7 +413,7 @@ function QuotationApp() {
               />
               <TextField
                 fullWidth
-                label="Sales Man"
+                label="Salesperson"
                 value={quotationData.salesMan}
                 onChange={handleCustomerChange('salesMan')}
                 margin="normal"
@@ -538,25 +538,29 @@ function QuotationApp() {
         </Paper>
 
         {/* Preview/Export View */}
-        <Paper ref={quotationRef} sx={{ p: 4, mb: 4, border: '2px solid #000' }}>
-          {/* Header */}
-          <Typography 
-            variant="h4" 
-            align="center" 
-            sx={{ 
-              mb: 3,
-              pb: 1,
-              borderBottom: '2px solid #000',
-              fontWeight: 'bold'
-            }}
-          >
-            QUOTATION
-          </Typography>
-
-          {/* Sales Man - Top Right */}
-          <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
-            <Typography variant="body2">
-              Sales Man: {quotationData.salesMan}
+        <Paper ref={quotationRef} sx={{ p: 4, mb: 4, border: '2px solid #000', position: 'relative' }}>
+          {/* Header with Salesperson */}
+          <Box sx={{ mb: 3, position: 'relative' }}>
+            <Typography 
+              variant="h4" 
+              align="center" 
+              sx={{ 
+                pb: 1,
+                borderBottom: '2px solid #000',
+                fontWeight: 'bold'
+              }}
+            >
+              QUOTATION
+            </Typography>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                position: 'absolute',
+                top: 0,
+                right: 0
+              }}
+            >
+              Salesperson: {quotationData.salesMan}
             </Typography>
           </Box>
 
