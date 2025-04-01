@@ -24,9 +24,11 @@ import {
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import LogoutIcon from '@mui/icons-material/Logout'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
 import * as XLSX from 'xlsx'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { PDFDocument } from 'pdf-lib'
 import Login from './components/Login'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -61,6 +63,7 @@ interface ValidationErrors {
 function QuotationApp() {
   const navigate = useNavigate()
   const quotationRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' })
   const [errors, setErrors] = useState<ValidationErrors>({})
   const [customUnit, setCustomUnit] = useState('')
@@ -272,22 +275,77 @@ function QuotationApp() {
         backgroundColor: '#ffffff'
       })
       const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
+      
+      // Create PDF with metadata
+      const pdfDoc = await PDFDocument.create()
+      
+      // Add metadata
+      pdfDoc.setTitle(`Quotation ${quotationData.quoteNo}`)
+      pdfDoc.setSubject(JSON.stringify(quotationData))
+      
+      // Add the page with the quotation content
+      const page = pdfDoc.addPage([canvas.width, canvas.height])
+      const img = await pdfDoc.embedPng(imgData)
+      page.drawImage(img, {
+        x: 0,
+        y: 0,
+        width: canvas.width,
+        height: canvas.height,
       })
 
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width
-
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-      pdf.save(`Quotation_${quotationData.quoteNo}.pdf`)
+      // Save the PDF
+      const pdfBytes = await pdfDoc.save()
+      
+      // Create a blob and download
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' })
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `Quotation_${quotationData.quoteNo}.pdf`
+      link.click()
+      window.URL.revokeObjectURL(url)
       
       setSnackbar({
         open: true,
         message: 'PDF exported successfully',
         severity: 'success'
+      })
+    }
+  }
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    try {
+      const arrayBuffer = await file.arrayBuffer()
+      const pdfDoc = await PDFDocument.load(arrayBuffer)
+      
+      // Get metadata from the PDF
+      const metadata = pdfDoc.getSubject()
+      if (!metadata) {
+        setSnackbar({
+          open: true,
+          message: 'No quotation data found in the PDF',
+          severity: 'error'
+        })
+        return
+      }
+
+      // Parse the metadata and update the form
+      const quotationData = JSON.parse(metadata)
+      setQuotationData(quotationData)
+      
+      setSnackbar({
+        open: true,
+        message: 'PDF loaded successfully',
+        severity: 'success'
+      })
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: 'Error loading PDF: ' + (error instanceof Error ? error.message : 'Unknown error'),
+        severity: 'error'
       })
     }
   }
@@ -729,6 +787,20 @@ function QuotationApp() {
           <Button variant="contained" onClick={exportToExcel}>
             Export to Excel
           </Button>
+          <Button
+            variant="contained"
+            startIcon={<UploadFileIcon />}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            Upload PDF
+          </Button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+            accept=".pdf"
+            style={{ display: 'none' }}
+          />
         </Stack>
 
         <Snackbar
